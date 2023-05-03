@@ -84,25 +84,7 @@ function App() {
       <PopupWithForm title="Вы уверены?" name="confirm" buttonText="Да" onClose={handleClosePopup} />
 
       <ImagePopup card={selectedCard} onClose={handleClosePopup} />
-
-      <template className="cards-template">
-        <li className="cards__list-item">
-          <article className="card">
-            <button className="card__delete-button page__link" type="button"></button>
-            <a href="#" className="card__link">
-              <img src="#" alt="#" className="card__image" />
-            </a>
-            <div className="card__description">
-              <h2 className="card__title"></h2>
-              <div className="card__like-container">
-                <button className="card__like-button" type="button"></button>
-                <p className="card__likes-counter">0</p>
-              </div>
-            </div>
-          </article>
-        </li>
-      </template>
-
+      
     </div>
   );
 }
