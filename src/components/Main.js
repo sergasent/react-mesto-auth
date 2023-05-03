@@ -1,21 +1,31 @@
 import React from "react";
 import api from "../utils/Api";
+import Card from "./Card";
 
 function Main(props) {
-  const [userInfo, setUserInfo] = React.useState({ userAvatar: '#', userName: 'Данные не получены', userDescription: 'Данные не получены' });
+  const [userInfo, setUserInfo] = React.useState({ 
+    userAvatar: '#', 
+    userName: 'Данные не получены', 
+    userDescription: 'Данные не получены' 
+  });
+  const [cards, setCards] = React.useState([]);
+
+  const loadUserInfo = () => api.getData('users/me');
+  const loadCards = () => api.getInitialCards('cards');
 
   React.useEffect(() => {
-    api.getData('users/me')
-      .then((data) => {
+    Promise.all([ loadUserInfo(), loadCards() ])
+      .then(([ userData, cardsData ]) => {
         setUserInfo({
-          ...data,
-          userAvatar: data.avatar,
-          userName: data.name,
-          userDescription: data.about,
+          ...userData,
+          userAvatar: userData.avatar,
+          userName: userData.name,
+          userDescription: userData.about,
         });
+        setCards([...cardsData]);
       })
       .catch((err) => console.log(err));
-  });
+  }, []);
 
   return (
     <main className="main page__section">
@@ -33,7 +43,11 @@ function Main(props) {
 
       <section className="cards" aria-label="Список изображений">
         <ul className="cards__list">
-
+          {
+            cards.map((item) => (
+              <Card key={item._id} card={item}/>
+            ))
+          }
         </ul>
       </section>
     </main>
