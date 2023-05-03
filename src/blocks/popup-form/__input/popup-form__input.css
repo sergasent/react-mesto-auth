@@ -1,0 +1,18 @@
+.popup-form__input {
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  padding: 1px 0 8px;
+  margin-bottom: 5px;
+  outline: none;
+
+  font-style: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.21;
+
+  box-sizing: border-box;
+}
+
+.popup-form__input::placeholder {
+  color: #C4C4C4;
+}
