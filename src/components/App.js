@@ -12,6 +12,7 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = React.useState(false);
   const [isEditProfilePopupOpen, setEditProfileOpened] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpened] = React.useState(false);
+  const [selectedCard, setSelectedCard] = React.useState(null);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -29,10 +30,15 @@ function App() {
     setEditAvatarPopupOpened(false);
     setEditProfileOpened(false);
     setAddPlacePopupOpened(false);
+    setSelectedCard(null);
   }
 
   function handleClosePopup() {
     closeAllPopups();
+  }
+
+  function handleCardClick(card) {
+    setSelectedCard(card);
   }
 
   return (
@@ -44,6 +50,7 @@ function App() {
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
+          onCardClick={handleCardClick}
         />
         <Footer />
         
@@ -76,7 +83,7 @@ function App() {
 
       <PopupWithForm title="Вы уверены?" name="confirm" buttonText="Да" onClose={handleClosePopup} />
 
-      <ImagePopup />
+      <ImagePopup card={selectedCard} onClose={handleClosePopup} />
 
       <template className="cards-template">
         <li className="cards__list-item">

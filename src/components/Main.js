@@ -45,7 +45,7 @@ function Main(props) {
         <ul className="cards__list">
           {
             cards.map((item) => (
-              <Card key={item._id} card={item}/>
+              <Card key={item._id} card={item} onCardClick={props.onCardClick} />
             ))
           }
         </ul>

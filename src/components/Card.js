@@ -1,9 +1,13 @@
 function Card(props) {
+  function handleClick() {
+    props.onCardClick(props.card);
+  }
+
   return (
     <li className="cards__list-item">
       <article className="card">
         <button className="card__delete-button root__link" type="button"></button>
-        <a href="#" className="card__link">
+        <a onClick={handleClick} href="#" className="card__link">
           <img src={props.card.link} alt={props.card.name} className="card__image" />
         </a>
         <div className="card__description">
