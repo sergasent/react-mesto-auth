@@ -1,13 +1,14 @@
 import logo from '../images/logo/logo.svg';
 import '../index.css';
 
+import Header from './Header';
+
 function App() {
   return (
     <div className="root">
       <div className="page">
-        <header className="header page__section">
-          <img src={logo} alt="Mesto Russia" lang="en" className="logo" />
-        </header>
+        
+        <Header logo={logo} />
 
         <main className="main page__section">
           <section className="profile" aria-label="Информация о профиле пользователя">
