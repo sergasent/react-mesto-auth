@@ -56,29 +56,23 @@ function App() {
         
       </div>
       
-      <PopupWithForm title="Обновить аватар" name="avatar" buttonText="Сохранить" isOpen={isEditAvatarPopupOpen} onClose={handleClosePopup}>
-        <fieldset className="popup-form__input-group">
-          <input className="popup-form__input popup-form__input_type_avatar-link" type="url" name="avatar" id="avatar" placeholder="Ссылка на картинку" required />
-          <span className="avatar-error popup-form__input-error"></span>
-        </fieldset>
+      <PopupWithForm title="Обновить аватар" name="avatar" isOpen={isEditAvatarPopupOpen} onClose={handleClosePopup}>
+        <input className="popup-form__input popup-form__input_type_avatar-link" type="url" name="avatar" id="avatar" placeholder="Ссылка на картинку" required />
+        <span className="avatar-error popup-form__input-error"></span>
       </PopupWithForm>
 
-      <PopupWithForm title="Редактировать профиль" name="profile" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} onClose={handleClosePopup}>
-        <fieldset className="popup-form__input-group">
-          <input className="popup-form__input popup-form__input_type_username" type="text" name="name" id="profile-name" placeholder="Ваше имя" minLength="2" maxLength="40" required />
-          <span className="profile-name-error popup-form__input-error"></span>
-          <input className="popup-form__input popup-form__input_type_user-description" type="text" name="about" id="profile-description" placeholder="О себе" minLength="2" maxLength="200" required />
-          <span className="profile-description-error popup-form__input-error"></span>
-        </fieldset>
+      <PopupWithForm title="Редактировать профиль" name="profile" isOpen={isEditProfilePopupOpen} onClose={handleClosePopup}>
+        <input className="popup-form__input popup-form__input_type_username" type="text" name="name" id="profile-name" placeholder="Ваше имя" minLength="2" maxLength="40" required />
+        <span className="profile-name-error popup-form__input-error"></span>
+        <input className="popup-form__input popup-form__input_type_user-description" type="text" name="about" id="profile-description" placeholder="О себе" minLength="2" maxLength="200" required />
+        <span className="profile-description-error popup-form__input-error"></span>
       </PopupWithForm>
 
-      <PopupWithForm title="Новое место" name="new-card" buttonText="Создать" isOpen={isAddPlacePopupOpen} onClose={handleClosePopup}>
-        <fieldset className="popup-form__input-group">
-          <input className="popup-form__input popup-form__input_type_card-name" type="text" name="name" id="card-name" placeholder="Название" minLength="2" maxLength="30" required />
-          <span className="card-name-error popup-form__input-error"></span>
-          <input className="popup-form__input popup-form__input_type_card-link" type="url" name="link" id="image-link" placeholder="Ссылка на картинку" required />
-          <span className="image-link-error popup-form__input-error"></span>
-        </fieldset>
+      <PopupWithForm title="Новое место" name="new-card" isOpen={isAddPlacePopupOpen} onClose={handleClosePopup}>
+        <input className="popup-form__input popup-form__input_type_card-name" type="text" name="name" id="card-name" placeholder="Название" minLength="2" maxLength="30" required />
+        <span className="card-name-error popup-form__input-error"></span>
+        <input className="popup-form__input popup-form__input_type_card-link" type="url" name="link" id="image-link" placeholder="Ссылка на картинку" required />
+        <span className="image-link-error popup-form__input-error"></span>
       </PopupWithForm>
 
       <PopupWithForm title="Вы уверены?" name="confirm" buttonText="Да" onClose={handleClosePopup} />
