@@ -1,5 +1,5 @@
 .popup__image-container {
-  margin: 0;
+  margin: auto;
 
   display: flex;
   flex-direction: column;
