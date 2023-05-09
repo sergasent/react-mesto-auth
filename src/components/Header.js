@@ -1,7 +1,7 @@
-function Header(props) {
+function Header({ logo }) {
   return (
     <header className="header page__section">
-      <img src={props.logo ?? '#'} alt="Mesto Russia" lang="en" className="logo" />
+      <img src={logo ?? "#"} alt="Mesto Russia" lang="en" className="logo" />
     </header>
   );
 }
