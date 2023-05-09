@@ -7,9 +7,7 @@ function Card(props) {
     <li className="cards__list-item">
       <article className="card">
         <button className="card__delete-button root__link" type="button"></button>
-        <a onClick={handleClick} href="#" className="card__link">
-          <img src={props.card.link} alt={props.card.name} className="card__image" />
-        </a>
+        <img onClick={handleClick} src={props.card.link} alt={props.card.name} className="card__image" />
         <div className="card__description">
           <h2 className="card__title">{props.card.name}</h2>
           <div className="card__like-container">

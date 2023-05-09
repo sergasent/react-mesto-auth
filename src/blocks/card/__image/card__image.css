@@ -4,6 +4,8 @@
 
   display: block;
 
+  cursor: pointer;
+
   object-fit: cover;
   object-position: center;
   aspect-ratio: 1 / 1;
