@@ -9,10 +9,12 @@ import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
 
 function App() {
+  const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
+
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = React.useState(false);
   const [isEditProfilePopupOpen, setEditProfileOpened] = React.useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpened] = React.useState(false);
-  const [selectedCard, setSelectedCard] = React.useState(null);
+  const [selectedCard, setSelectedCard] = React.useState(INITIAL_STATE_SELECTED_CARD);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -30,7 +32,7 @@ function App() {
     setEditAvatarPopupOpened(false);
     setEditProfileOpened(false);
     setAddPlacePopupOpened(false);
-    setSelectedCard(null);
+    setSelectedCard(INITIAL_STATE_SELECTED_CARD);
   }
 
   function handleClosePopup() {
