@@ -11,6 +11,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
+import EditProfilePopup from './EditProfilePopup';
 import ImagePopup from './ImagePopup';
 
 function App() {
@@ -72,6 +73,16 @@ function App() {
     );
   }
 
+  function onUpdateUser(data) {
+    return handleError(
+      api.setUserInfo(data)
+        .then((userData) => {
+          setCurrentUser(userData);
+          closeAllPopups();
+        }),
+    );
+  }
+
   useEffect(() => {
     handleError(
       Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -116,35 +127,11 @@ function App() {
           <span className="avatar-error popup-form__input-error" />
         </PopupWithForm>
 
-        <PopupWithForm
-          title="Редактировать профиль"
-          name="profile"
+        <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
           onClose={handleClosePopup}
-        >
-          <input
-            className="popup-form__input popup-form__input_type_username"
-            type="text"
-            name="name"
-            id="profile-name"
-            placeholder="Ваше имя"
-            minLength="2"
-            maxLength="40"
-            required
-          />
-          <span className="profile-name-error popup-form__input-error" />
-          <input
-            className="popup-form__input popup-form__input_type_user-description"
-            type="text"
-            name="about"
-            id="profile-description"
-            placeholder="О себе"
-            minLength="2"
-            maxLength="200"
-            required
-          />
-          <span className="profile-description-error popup-form__input-error" />
-        </PopupWithForm>
+          onUpdateUser={onUpdateUser}
+        />
 
         <PopupWithForm
           title="Новое место"

@@ -72,6 +72,10 @@ class Api {
     return this.deleteData(`cards/${cardId}`);
   }
 
+  setUserInfo(data) {
+    return this.patchData('users/me', data);
+  }
+
   getInitialCards() {
     return this.getData('cards');
   }
