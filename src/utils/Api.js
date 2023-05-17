@@ -76,6 +76,10 @@ class Api {
     return this.patchData('users/me', data);
   }
 
+  setUserAvatar(data) {
+    return this.patchData('users/me/avatar', data);
+  }
+
   getInitialCards() {
     return this.getData('cards');
   }

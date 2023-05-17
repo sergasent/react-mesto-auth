@@ -1,8 +1,11 @@
 .profile__avatar-link {
   margin-right: 30px;
   border-radius: 50%;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
 
-  display: block;
   position: relative;
 }
 

@@ -22,13 +22,13 @@ function Main({
         aria-label="Информация о профиле пользователя"
       >
         <div className="profile__container">
-          <a onClick={onEditAvatar} href="/" className="profile__avatar-link">
+          <button onClick={onEditAvatar} type="button" className="profile__avatar-link">
             <img
               src={avatar ?? defaultUserIcon}
               alt="Аватар пользователя"
               className="profile__image"
             />
-          </a>
+          </button>
           <div className="profile__info">
             <h1 className="profile__name">{name ?? ''}</h1>
             <button

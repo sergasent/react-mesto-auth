@@ -9,8 +9,8 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     about: currentAbout,
   } = useContext(CurrentUserContext);
 
-  const [name, setName] = useState(currentName);
-  const [about, setAbout] = useState(currentAbout);
+  const [name, setName] = useState('');
+  const [about, setAbout] = useState('');
 
   function handleNameChange(e) {
     setName(e.target.value);
@@ -42,7 +42,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     >
       <input
         onChange={handleNameChange}
-        value={name}
+        value={name || ''}
         className="popup-form__input popup-form__input_type_username"
         type="text"
         name="name"
@@ -55,7 +55,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       <span className="profile-name-error popup-form__input-error" />
       <input
         onChange={handleDescriptionChange}
-        value={about}
+        value={about || ''}
         className="popup-form__input popup-form__input_type_user-description"
         type="text"
         name="about"

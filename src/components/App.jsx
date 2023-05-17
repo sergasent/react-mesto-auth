@@ -12,6 +12,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 
 function App() {
@@ -83,6 +84,19 @@ function App() {
     );
   }
 
+  function handleUpdateAvatar(data) {
+    return handleError(
+      api.setUserAvatar(data)
+        .then((userData) => {
+          setCurrentUser({
+            ...currentUser,
+            avatar: userData.avatar,
+          });
+          closeAllPopups();
+        }),
+    );
+  }
+
   useEffect(() => {
     handleError(
       Promise.all([api.getUserInfo(), api.getInitialCards()])
@@ -110,22 +124,11 @@ function App() {
           <Footer />
         </div>
 
-        <PopupWithForm
-          title="Обновить аватар"
-          name="avatar"
+        <EditAvatarPopup
           isOpen={isEditAvatarPopupOpen}
           onClose={handleClosePopup}
-        >
-          <input
-            className="popup-form__input popup-form__input_type_avatar-link"
-            type="url"
-            name="avatar"
-            id="avatar"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span className="avatar-error popup-form__input-error" />
-        </PopupWithForm>
+          onUpdateAvatar={handleUpdateAvatar}
+        />
 
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
