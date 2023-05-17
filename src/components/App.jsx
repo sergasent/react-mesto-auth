@@ -3,6 +3,7 @@ import logo from '../images/logo/logo.svg';
 import '../index.css';
 
 import api from '../utils/Api';
+import handleError from '../utils/utils';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -15,11 +16,12 @@ import ImagePopup from './ImagePopup';
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
 
+  const [cards, setCards] = useState([]);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
   const [isEditProfilePopupOpen, setEditProfileOpened] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpened] = useState(false);
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState({});
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -48,12 +50,36 @@ function App() {
     setSelectedCard(card);
   }
 
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((item) => item._id === currentUser._id);
+    handleError(
+      api.changeLikeCardStatus(card._id, !isLiked)
+        .then((dataCard) => {
+          setCards(cards.map((c) => {
+            if (c._id === card._id) return dataCard;
+            return c;
+          }));
+        }),
+    );
+  }
+
+  function handleCardDelete(card) {
+    handleError(
+      api.deleteCard(card._id)
+        .then(() => {
+          setCards(cards.filter((item) => item._id !== card._id));
+        }),
+    );
+  }
+
   useEffect(() => {
-    api.getData('users/me')
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => console.log(err));
+    handleError(
+      Promise.all([api.getUserInfo(), api.getInitialCards()])
+        .then(([userInfo, cardsData]) => {
+          setCurrentUser(userInfo);
+          setCards(cardsData);
+        }),
+    );
   }, []);
 
   return (
@@ -62,10 +88,13 @@ function App() {
         <div className="page__content">
           <Header logo={logo} />
           <Main
+            cards={cards}
             onEditAvatar={handleEditAvatarClick}
             onEditProfile={handleEditProfileClick}
             onAddPlace={handleAddPlaceClick}
             onCardClick={handleCardClick}
+            onCardLike={handleCardLike}
+            onCardDelete={handleCardDelete}
           />
           <Footer />
         </div>
@@ -84,7 +113,7 @@ function App() {
             placeholder="Ссылка на картинку"
             required
           />
-          <span className="avatar-error popup-form__input-error"></span>
+          <span className="avatar-error popup-form__input-error" />
         </PopupWithForm>
 
         <PopupWithForm
@@ -103,7 +132,7 @@ function App() {
             maxLength="40"
             required
           />
-          <span className="profile-name-error popup-form__input-error"></span>
+          <span className="profile-name-error popup-form__input-error" />
           <input
             className="popup-form__input popup-form__input_type_user-description"
             type="text"
@@ -114,7 +143,7 @@ function App() {
             maxLength="200"
             required
           />
-          <span className="profile-description-error popup-form__input-error"></span>
+          <span className="profile-description-error popup-form__input-error" />
         </PopupWithForm>
 
         <PopupWithForm
@@ -133,7 +162,7 @@ function App() {
             maxLength="30"
             required
           />
-          <span className="card-name-error popup-form__input-error"></span>
+          <span className="card-name-error popup-form__input-error" />
           <input
             className="popup-form__input popup-form__input_type_card-link"
             type="url"
@@ -142,7 +171,7 @@ function App() {
             placeholder="Ссылка на картинку"
             required
           />
-          <span className="image-link-error popup-form__input-error"></span>
+          <span className="image-link-error popup-form__input-error" />
         </PopupWithForm>
 
         <PopupWithForm

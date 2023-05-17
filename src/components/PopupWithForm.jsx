@@ -1,6 +1,10 @@
-function PopupWithForm({ name, isOpen, title, children, buttonText, onClose }) {
+import React from 'react';
+
+function PopupWithForm({
+  name, isOpen, title, children, buttonText, onClose,
+}) {
   return (
-    <div className={`popup popup_type_${name} ${isOpen ? "popup_opened" : ""}`}>
+    <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
       <div className="popup__container">
         <h2 className="popup__title">{title}</h2>
         <form
@@ -12,7 +16,7 @@ function PopupWithForm({ name, isOpen, title, children, buttonText, onClose }) {
         >
           <fieldset className="popup-form__input-group">{children}</fieldset>
           <button className="popup__button popup-form__button" type="submit">
-            {buttonText || "Сохранить"}
+            {buttonText || 'Сохранить'}
           </button>
         </form>
 
@@ -20,7 +24,8 @@ function PopupWithForm({ name, isOpen, title, children, buttonText, onClose }) {
           onClick={onClose}
           className="popup__close-button page__link"
           type="button"
-        ></button>
+          aria-label="Закрыть"
+        />
       </div>
     </div>
   );
