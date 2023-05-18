@@ -72,6 +72,10 @@ class Api {
     return this.deleteData(`cards/${cardId}`);
   }
 
+  addCard(data) {
+    return this.postData('cards', data);
+  }
+
   setUserInfo(data) {
     return this.patchData('users/me', data);
   }

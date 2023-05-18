@@ -10,6 +10,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     });
   }
 
+  //  Можно было бы использовать useClearInputs
   useEffect(() => {
     inputLinkRef.current.value = '';
   });

@@ -10,10 +10,11 @@ import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
-import PopupWithForm from './PopupWithForm';
 import EditProfilePopup from './EditProfilePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
+import AddPlacePopup from './AddPlacePopup';
+import ConfirmPopup from './ConfirmPopup';
 
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
@@ -22,8 +23,10 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
   const [isEditProfilePopupOpen, setEditProfileOpened] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpened] = useState(false);
+  const [isConfirmPopupOpen, setConfirmPopupOpened] = useState(false);
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
   const [currentUser, setCurrentUser] = useState({});
+  const [runIfConfirm, setRunIfConfirm] = useState(null);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -42,6 +45,7 @@ function App() {
     setEditProfileOpened(false);
     setAddPlacePopupOpened(false);
     setSelectedCard(INITIAL_STATE_SELECTED_CARD);
+    setConfirmPopupOpened(false);
   }
 
   function handleClosePopup() {
@@ -57,21 +61,27 @@ function App() {
     handleError(
       api.changeLikeCardStatus(card._id, !isLiked)
         .then((dataCard) => {
-          setCards(cards.map((c) => {
-            if (c._id === card._id) return dataCard;
-            return c;
+          setCards(cards.map((cardItem) => {
+            if (cardItem._id === card._id) return dataCard;
+            return cardItem;
           }));
         }),
     );
   }
 
   function handleCardDelete(card) {
-    handleError(
+    setConfirmPopupOpened(true);
+
+    //  Следующая строка отняла несколько часов и пару тысяч нервных клеток :)
+    const delFunc = () => () => handleError(
       api.deleteCard(card._id)
         .then(() => {
           setCards(cards.filter((item) => item._id !== card._id));
+          closeAllPopups();
         }),
     );
+
+    setRunIfConfirm(delFunc);
   }
 
   function onUpdateUser(data) {
@@ -95,6 +105,20 @@ function App() {
           closeAllPopups();
         }),
     );
+  }
+
+  function handleAddPlaceSubmit(data) {
+    return handleError(
+      api.addCard(data)
+        .then((newCard) => {
+          setCards([newCard, ...cards]);
+          closeAllPopups();
+        }),
+    );
+  }
+
+  function handleConfirmSubmit() {
+    return runIfConfirm();
   }
 
   useEffect(() => {
@@ -136,39 +160,16 @@ function App() {
           onUpdateUser={onUpdateUser}
         />
 
-        <PopupWithForm
-          title="Новое место"
-          name="new-card"
+        <AddPlacePopup
           isOpen={isAddPlacePopupOpen}
           onClose={handleClosePopup}
-        >
-          <input
-            className="popup-form__input popup-form__input_type_card-name"
-            type="text"
-            name="name"
-            id="card-name"
-            placeholder="Название"
-            minLength="2"
-            maxLength="30"
-            required
-          />
-          <span className="card-name-error popup-form__input-error" />
-          <input
-            className="popup-form__input popup-form__input_type_card-link"
-            type="url"
-            name="link"
-            id="image-link"
-            placeholder="Ссылка на картинку"
-            required
-          />
-          <span className="image-link-error popup-form__input-error" />
-        </PopupWithForm>
+          onAddPlace={handleAddPlaceSubmit}
+        />
 
-        <PopupWithForm
-          title="Вы уверены?"
-          name="confirm"
-          buttonText="Да"
+        <ConfirmPopup
+          isOpen={isConfirmPopupOpen}
           onClose={handleClosePopup}
+          onSubmit={handleConfirmSubmit}
         />
 
         <ImagePopup card={selectedCard} onClose={handleClosePopup} />
