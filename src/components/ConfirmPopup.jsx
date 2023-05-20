@@ -2,6 +2,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
 function ConfirmPopup({ isOpen, onClose, onSubmit }) {
+  const isFormValid = true;
   return (
     <PopupWithForm
       title="Вы уверены?"
@@ -10,6 +11,7 @@ function ConfirmPopup({ isOpen, onClose, onSubmit }) {
       isOpen={isOpen}
       onClose={onClose}
       onSubmit={onSubmit}
+      isValid={isFormValid}
     />
   );
 }

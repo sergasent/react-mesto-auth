@@ -1,23 +1,24 @@
-import React, { useState, memo } from 'react';
+import React from 'react';
+
 import PopupWithForm from './PopupWithForm';
-import useClearInputs from '../hooks/useClearInputs';
+import useFormValidation from '../hooks/useFormValidation';
 
-const AddPlacePopup = memo(({ isOpen, onClose, onAddPlace }) => {
-  const [name, setName] = useState('');
-  const [link, setLink] = useState('');
-
-  useClearInputs(isOpen, setName, setLink);
+function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+  const {
+    isFormValid, formValues, validState, handleChange,
+  } = useFormValidation({
+    isOpen,
+    inputs: {
+      name: '',
+      link: '',
+    },
+  });
 
   function handleSubmit() {
-    return onAddPlace({ name, link });
-  }
-
-  function handleNameChange(e) {
-    setName(e.target.value);
-  }
-
-  function handleLinkChange(e) {
-    setLink(e.target.value);
+    return onAddPlace({
+      name: formValues?.name,
+      link: formValues?.link,
+    });
   }
 
   return (
@@ -25,13 +26,14 @@ const AddPlacePopup = memo(({ isOpen, onClose, onAddPlace }) => {
       title="Новое место"
       name="new-card"
       isOpen={isOpen}
+      isValid={isFormValid}
       onClose={onClose}
       onSubmit={handleSubmit}
     >
       <input
-        value={name || ''}
-        onChange={handleNameChange}
-        className="popup-form__input popup-form__input_type_card-name"
+        value={formValues?.name ?? ''}
+        onChange={handleChange}
+        className={`popup-form__input popup-form__input_type_card-name ${validState?.name && 'popup-form__input_type_error'}`}
         type="text"
         name="name"
         id="card-name"
@@ -40,20 +42,24 @@ const AddPlacePopup = memo(({ isOpen, onClose, onAddPlace }) => {
         maxLength="30"
         required
       />
-      <span className="card-name-error popup-form__input-error" />
+      <span className={`popup-form__input-error ${validState?.name && 'popup-form__input-error_visible'}`}>
+        {validState?.name}
+      </span>
       <input
-        value={link || ''}
-        onChange={handleLinkChange}
-        className="popup-form__input popup-form__input_type_card-link"
+        value={formValues?.link ?? ''}
+        onChange={handleChange}
+        className={`popup-form__input popup-form__input_type_card-link ${validState?.link && 'popup-form__input_type_error'}`}
         type="url"
         name="link"
         id="image-link"
         placeholder="Ссылка на картинку"
         required
       />
-      <span className="image-link-error popup-form__input-error" />
+      <span className={`popup-form__input-error ${validState?.link && 'popup-form__input-error_visible'}`}>
+        {validState?.link}
+      </span>
     </PopupWithForm>
   );
-});
+}
 
 export default AddPlacePopup;

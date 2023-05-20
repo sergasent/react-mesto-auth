@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 
-function useClearInputs(isOpen, ...setters) {
+function useClearInputs({ isOpen, inputs }) {
   useEffect(() => {
-    setters.forEach((setter) => setter(''));
+    if (isOpen) {
+      inputs.forEach((item) => {
+        item.input.clearInput(item.clearValue);
+      });
+    }
   }, [isOpen]);
 }
 

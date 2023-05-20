@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 
 function PopupWithForm({
-  name, isOpen, title, children, buttonText, onClose, onSubmit,
+  name, isOpen, isValid, title, children, buttonText, onClose, onSubmit,
 }) {
   const [buttonCaption, setButtonText] = useState(buttonText || 'Сохранить');
   const defaultButtonCaption = buttonCaption;
@@ -15,8 +16,18 @@ function PopupWithForm({
       }, 300)); // 300мс на анимацию закрытия
   }
 
+  function handleQuitClick(evt) {
+    if (evt.target === evt.currentTarget) {
+      onClose();
+    }
+  }
+
   return (
-    <div className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}>
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+    <div
+      onClick={handleQuitClick}
+      className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}
+    >
       <div className="popup__container">
         <h2 className="popup__title">{title}</h2>
         <form
@@ -28,7 +39,11 @@ function PopupWithForm({
           noValidate
         >
           <fieldset className="popup-form__input-group">{children}</fieldset>
-          <button className="popup__button popup-form__button" type="submit">
+          <button
+            className={`popup__button popup-form__button ${!isValid && 'popup-form__button_disabled'}`}
+            type="submit"
+            disabled={!isValid}
+          >
             {buttonCaption}
           </button>
         </form>
