@@ -57,8 +57,35 @@ class Api {
     });
   }
 
-  getInitialCards(relativeLink) {
-    return this.getData(relativeLink);
+  getUserInfo() {
+    return this.getData('users/me');
+  }
+
+  changeLikeCardStatus(cardId, shouldSetLike) {
+    if (shouldSetLike) {
+      return this.putData(`cards/${cardId}/likes`);
+    }
+    return this.deleteData(`cards/${cardId}/likes`);
+  }
+
+  deleteCard(cardId) {
+    return this.deleteData(`cards/${cardId}`);
+  }
+
+  addCard(data) {
+    return this.postData('cards', data);
+  }
+
+  setUserInfo(data) {
+    return this.patchData('users/me', data);
+  }
+
+  setUserAvatar(data) {
+    return this.patchData('users/me/avatar', data);
+  }
+
+  getInitialCards() {
+    return this.getData('cards');
   }
 }
 
@@ -69,7 +96,7 @@ const api = new Api(
       authorization: '389cc047-0fd3-4299-98ad-2eb5ed0f0d06',
       'content-type': 'application/json',
     },
-  }
+  },
 );
 
 export default api;
