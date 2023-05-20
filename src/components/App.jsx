@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import logo from '../images/logo/logo.svg';
-import '../index.css';
 
 import api from '../utils/Api';
 import handleError from '../utils/utils';
