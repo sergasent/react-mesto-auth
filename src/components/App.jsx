@@ -19,6 +19,7 @@ import ImagePopup from './ImagePopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmPopup from './ConfirmPopup';
 import Login from './Login';
+import Register from './Register';
 
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
@@ -162,7 +163,11 @@ function App() {
               path="/sign-in"
               element={<Login fillHeader={setHeaderState} />}
             />
-            {/* <Route exact path="/sign-up" element={} /> */}
+            <Route
+              exact
+              path="/sign-up"
+              element={<Register fillHeader={setHeaderState} />}
+            />
           </Routes>
           <Footer />
         </div>

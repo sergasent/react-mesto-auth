@@ -83,6 +83,8 @@
 @import url('./blocks/modal-block/__button/modal-block__button.css');
 @import url('./blocks/modal-block/__button/_theme/modal-block__button_theme_dark.css');
 @import url('./blocks/modal-block/__button/_type/modal-block__button_type_auth.css');
+@import url('./blocks/modal-block/__text/modal-block__text.css');
+@import url('./blocks/modal-block/__link/modal-block__link.css');
 
 
 /*  modal-form  */
