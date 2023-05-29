@@ -28,19 +28,19 @@ function PopupWithForm({
       onClick={handleQuitClick}
       className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''}`}
     >
-      <div className="popup__container">
-        <h2 className="popup__title">{title}</h2>
+      <div className="modal-block">
+        <h2 className="modal-block__title">{title}</h2>
         <form
           onSubmit={handleSubmit}
-          className="popup-form"
+          className="modal-form"
           name={`${name}-form`}
           method="post"
           action="/"
           noValidate
         >
-          <fieldset className="popup-form__input-group">{children}</fieldset>
+          <fieldset className="modal-form__input-group">{children}</fieldset>
           <button
-            className={`popup__button popup-form__button ${!isValid && 'popup-form__button_disabled'}`}
+            className={`modal-block__button modal-form__button ${!isValid && 'modal-form__button_disabled'}`}
             type="submit"
             disabled={!isValid}
           >

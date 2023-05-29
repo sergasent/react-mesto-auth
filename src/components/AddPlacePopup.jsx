@@ -33,7 +33,7 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       <input
         value={formValues?.name ?? ''}
         onChange={handleChange}
-        className={`popup-form__input popup-form__input_type_card-name ${validState?.name && 'popup-form__input_type_error'}`}
+        className={`modal-form__input modal-form__input_type_card-name ${validState?.name && 'modal-form__input_type_error'}`}
         type="text"
         name="name"
         id="card-name"
@@ -42,20 +42,20 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
         maxLength="30"
         required
       />
-      <span className={`popup-form__input-error ${validState?.name && 'popup-form__input-error_visible'}`}>
+      <span className={`modal-form__input-error ${validState?.name && 'modal-form__input-error_visible'}`}>
         {validState?.name}
       </span>
       <input
         value={formValues?.link ?? ''}
         onChange={handleChange}
-        className={`popup-form__input popup-form__input_type_card-link ${validState?.link && 'popup-form__input_type_error'}`}
+        className={`modal-form__input modal-form__input_type_card-link ${validState?.link && 'modal-form__input_type_error'}`}
         type="url"
         name="link"
         id="image-link"
         placeholder="Ссылка на картинку"
         required
       />
-      <span className={`popup-form__input-error ${validState?.link && 'popup-form__input-error_visible'}`}>
+      <span className={`modal-form__input-error ${validState?.link && 'modal-form__input-error_visible'}`}>
         {validState?.link}
       </span>
     </PopupWithForm>

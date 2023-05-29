@@ -25,14 +25,14 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
     >
       <input
         ref={inputLinkRef}
-        className="popup-form__input popup-form__input_type_avatar-link"
+        className="modal-form__input modal-form__input_type_avatar-link"
         type="url"
         name="avatar"
         id="avatar"
         placeholder="Ссылка на картинку"
         required
       />
-      <span className="avatar-error popup-form__input-error" />
+      <span className="avatar-error modal-form__input-error" />
     </PopupWithForm>
   );
 }

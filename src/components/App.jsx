@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Route, Routes } from 'react-router-dom';
+
+import ProtectedRoute from './ProtectedRoute';
+
 import logo from '../images/logo/logo.svg';
 
 import api from '../utils/Api';
@@ -14,6 +18,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import ImagePopup from './ImagePopup';
 import AddPlacePopup from './AddPlacePopup';
 import ConfirmPopup from './ConfirmPopup';
+import Login from './Login';
 
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
@@ -26,6 +31,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
   const [currentUser, setCurrentUser] = useState({});
   const [runIfConfirm, setRunIfConfirm] = useState(null);
+  const [headerState, setHeaderState] = useState({});
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -134,16 +140,30 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <div className="page__content">
-          <Header logo={logo} />
-          <Main
-            cards={cards}
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
+          <Header logo={logo} headerState={headerState} />
+          <Routes>
+            <Route
+              path="/"
+              element={(
+                <ProtectedRoute
+                  element={Main}
+                  cards={cards}
+                  onEditAvatar={handleEditAvatarClick}
+                  onEditProfile={handleEditProfileClick}
+                  onAddPlace={handleAddPlaceClick}
+                  onCardClick={handleCardClick}
+                  onCardLike={handleCardLike}
+                  onCardDelete={handleCardDelete}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/sign-in"
+              element={<Login fillHeader={setHeaderState} />}
+            />
+            {/* <Route exact path="/sign-up" element={} /> */}
+          </Routes>
           <Footer />
         </div>
 
