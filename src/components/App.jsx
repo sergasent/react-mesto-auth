@@ -4,6 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 
 import logo from '../images/logo/logo.svg';
+import imgSuccessfull from '../images/infoTooltip/successful.svg';
+import imgFailed from '../images/infoTooltip/failed.svg';
 
 import api from '../utils/Api';
 import handleError from '../utils/utils';
@@ -20,6 +22,7 @@ import AddPlacePopup from './AddPlacePopup';
 import ConfirmPopup from './ConfirmPopup';
 import Login from './Login';
 import Register from './Register';
+import InfoTooltip from './InfoTooltip';
 
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
@@ -29,6 +32,10 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfileOpened] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpened] = useState(false);
   const [isConfirmPopupOpen, setConfirmPopupOpened] = useState(false);
+  const [isInfoTooltipOpen, setInfoTooltipOpened] = useState(false);
+
+  // eslint-disable-next-line no-unused-vars
+  const [isInfoTooltipSuccefull, setInfoTooltipSuccefull] = useState(false);
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
   const [currentUser, setCurrentUser] = useState({});
   const [runIfConfirm, setRunIfConfirm] = useState(null);
@@ -52,6 +59,7 @@ function App() {
     setAddPlacePopupOpened(false);
     setSelectedCard(INITIAL_STATE_SELECTED_CARD);
     setConfirmPopupOpened(false);
+    setInfoTooltipOpened(false);
   }
 
   function handleClosePopup() {
@@ -161,12 +169,22 @@ function App() {
             <Route
               exact
               path="/sign-in"
-              element={<Login fillHeader={setHeaderState} />}
+              element={(
+                <Login
+                  fillHeader={setHeaderState}
+                  openInfoTooltip={setInfoTooltipOpened}
+                />
+              )}
             />
             <Route
               exact
               path="/sign-up"
-              element={<Register fillHeader={setHeaderState} />}
+              element={(
+                <Register
+                  fillHeader={setHeaderState}
+                  openInfoTooltip={setInfoTooltipOpened}
+                />
+              )}
             />
           </Routes>
           <Footer />
@@ -194,6 +212,16 @@ function App() {
           isOpen={isConfirmPopupOpen}
           onClose={handleClosePopup}
           onSubmit={handleConfirmSubmit}
+        />
+
+        <InfoTooltip
+          isOpen={isInfoTooltipOpen}
+          isSuccessful={isInfoTooltipSuccefull}
+          onClose={handleClosePopup}
+          imgSuccessful={imgSuccessfull}
+          imgFailed={imgFailed}
+          textSuccessful="Вы успешно зарегистрировались!"
+          textFailed="Что-то пошло не так! Попробуйте ещё раз."
         />
 
         <ImagePopup card={selectedCard} onClose={handleClosePopup} />

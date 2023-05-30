@@ -2,7 +2,7 @@
 import React from 'react';
 
 function InfoTooltip({
-  name, isOpen, onClose,
+  isOpen, isSuccessful, onClose, imgSuccessful, imgFailed, textSuccessful, textFailed,
 }) {
   function handleQuitClick(evt) {
     if (evt.target === evt.currentTarget) {
@@ -14,10 +14,11 @@ function InfoTooltip({
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       onClick={handleQuitClick}
-      className={`popup popup_type_${name} ${isOpen ? 'popup_opened' : ''} popup_opened`}
+      className={`popup ${isOpen ? 'popup_opened' : ''}`}
     >
-      <div className="modal-block">
-
+      <div className="modal-block modal-block_type_info">
+        <img className="modal-block__info-image" src={isSuccessful ? imgSuccessful : imgFailed} alt="" />
+        <h2 className="modal-block__info-text">{isSuccessful ? textSuccessful : textFailed}</h2>
         <button
           onClick={onClose}
           className="popup__close-button page__link"
