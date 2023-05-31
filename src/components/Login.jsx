@@ -3,7 +3,7 @@ import BlockWithForm from './BlockWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 import useIsCurrentLocation from '../hooks/useIsCurrentLocation';
 
-function Login({ fillHeader }) {
+function Login({ fillHeader, onLogin }) {
   const colorTheme = 'dark';
   const modalType = 'auth';
   const isOpen = useIsCurrentLocation('/sign-in');
@@ -19,7 +19,10 @@ function Login({ fillHeader }) {
   });
 
   function handleSubmit() {
-
+    return onLogin({
+      email: formValues?.email,
+      password: formValues?.password,
+    });
   }
 
   useEffect(() => {

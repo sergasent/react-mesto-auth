@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import {
+  Route, Routes, useNavigate, Navigate,
+} from 'react-router-dom';
 
 import ProtectedRoute from './ProtectedRoute';
 
@@ -9,6 +11,7 @@ import imgFailed from '../images/infoTooltip/failed.svg';
 
 import api from '../utils/Api';
 import handleError from '../utils/utils';
+import { register, authorize, getContent } from '../utils/Auth';
 
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -34,12 +37,15 @@ function App() {
   const [isConfirmPopupOpen, setConfirmPopupOpened] = useState(false);
   const [isInfoTooltipOpen, setInfoTooltipOpened] = useState(false);
 
-  // eslint-disable-next-line no-unused-vars
   const [isInfoTooltipSuccefull, setInfoTooltipSuccefull] = useState(false);
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
   const [currentUser, setCurrentUser] = useState({});
   const [runIfConfirm, setRunIfConfirm] = useState(null);
   const [headerState, setHeaderState] = useState({});
+  const [isLoggedIn, setLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  const navigate = useNavigate();
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -85,8 +91,6 @@ function App() {
 
   function handleCardDelete(card) {
     setConfirmPopupOpened(true);
-
-    //  Следующая строка отняла несколько часов и пару тысяч нервных клеток :)
     const delFunc = () => () => handleError(
       api.deleteCard(card._id)
         .then(() => {
@@ -102,7 +106,10 @@ function App() {
     return handleError(
       api.setUserInfo(data)
         .then((userData) => {
-          setCurrentUser(userData);
+          setCurrentUser((currentData) => ({
+            ...currentData,
+            ...userData,
+          }));
           closeAllPopups();
         }),
     );
@@ -112,10 +119,10 @@ function App() {
     return handleError(
       api.setUserAvatar(data)
         .then((userData) => {
-          setCurrentUser({
-            ...currentUser,
+          setCurrentUser((currentData) => ({
+            ...currentData,
             avatar: userData.avatar,
-          });
+          }));
           closeAllPopups();
         }),
     );
@@ -135,7 +142,67 @@ function App() {
     return runIfConfirm();
   }
 
+  function handleLogin(data) {
+    return handleError(
+      authorize(data)
+        .then((res) => {
+          if (res.token) {
+            handleError(
+              getContent(res.token)
+                .then((userData) => {
+                  setUserEmail(userData.data.email || '');
+                  setLoggedIn(true);
+                  navigate('/', { replace: true });
+                }),
+            );
+          }
+        }),
+    );
+  }
+
+  function handleRegister(data) {
+    return handleError(
+      register(data)
+        .then(() => {
+          handleLogin(data)
+            .then(() => {
+              setInfoTooltipSuccefull(true);
+              setInfoTooltipOpened(true);
+            });
+        })
+        .catch((e) => {
+          setInfoTooltipSuccefull(false);
+          setInfoTooltipOpened(true);
+          return Promise.reject(e);
+        }),
+    );
+  }
+
+  function handleSignOut() {
+    setUserEmail('');
+    setLoggedIn(false);
+    localStorage.removeItem('jwt');
+    navigate('/sign-in', { replace: true });
+  }
+
+  function tokenCheck() {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      handleError(
+        getContent(token)
+          .then((userData) => {
+            if (userData) {
+              setUserEmail(userData.data.email || '');
+              setLoggedIn(true);
+              navigate('/', { replace: true });
+            }
+          }),
+      );
+    }
+  }
+
   useEffect(() => {
+    tokenCheck();
     handleError(
       Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userInfo, cardsData]) => {
@@ -149,7 +216,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page">
         <div className="page__content">
-          <Header logo={logo} headerState={headerState} />
+          <Header logo={logo} userEmail={userEmail} headerState={headerState} />
           <Routes>
             <Route
               path="/"
@@ -163,6 +230,9 @@ function App() {
                   onCardClick={handleCardClick}
                   onCardLike={handleCardLike}
                   onCardDelete={handleCardDelete}
+                  onSignOut={handleSignOut}
+                  fillHeader={setHeaderState}
+                  isLoggedIn={isLoggedIn}
                 />
               )}
             />
@@ -173,6 +243,7 @@ function App() {
                 <Login
                   fillHeader={setHeaderState}
                   openInfoTooltip={setInfoTooltipOpened}
+                  onLogin={handleLogin}
                 />
               )}
             />
@@ -183,9 +254,11 @@ function App() {
                 <Register
                   fillHeader={setHeaderState}
                   openInfoTooltip={setInfoTooltipOpened}
+                  onRegister={handleRegister}
                 />
               )}
             />
+            <Route path="*" element={<Navigate to="/sign-in" replace />} />
           </Routes>
           <Footer />
         </div>

@@ -16,7 +16,7 @@ class Api {
       .then((response) => {
         if (response.ok) return response.json();
 
-        return Promise.reject(`Ошибка: ${response.status}`);
+        return Promise.reject(response.status);
       });
   }
 

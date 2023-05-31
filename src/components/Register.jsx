@@ -4,7 +4,7 @@ import BlockWithForm from './BlockWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 import useIsCurrentLocation from '../hooks/useIsCurrentLocation';
 
-function Register({ fillHeader }) {
+function Register({ fillHeader, onRegister }) {
   const colorTheme = 'dark';
   const modalType = 'auth';
   const isOpen = useIsCurrentLocation('/sign-up');
@@ -20,7 +20,10 @@ function Register({ fillHeader }) {
   });
 
   function handleSubmit() {
-
+    return onRegister({
+      email: formValues?.email,
+      password: formValues?.password,
+    });
   }
 
   useEffect(() => {
