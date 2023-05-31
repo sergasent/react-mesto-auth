@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 
-function BlockWithForm({
+const BlockWithForm = ({
   name, isValid, title, children, buttonText, onSubmit, theme, type,
-}) {
+}) => {
   const [buttonCaption, setButtonText] = useState(buttonText || 'Сохранить');
   const defaultButtonCaption = buttonCaption;
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setButtonText('Загрузка');
     onSubmit()
       .finally(() => setTimeout(() => {
         setButtonText(defaultButtonCaption);
       }, 300)); // 300мс на анимацию закрытия
-  }
+  };
 
   return (
     <div className={`modal-block ${theme ? `modal-block_theme_${theme}` : ''} ${type ? `modal-block_type_${type}` : ''}`}>
@@ -37,6 +37,6 @@ function BlockWithForm({
       </form>
     </div>
   );
-}
+};
 
 export default BlockWithForm;

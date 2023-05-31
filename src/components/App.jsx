@@ -28,7 +28,7 @@ import Register from './Register';
 import InfoTooltip from './InfoTooltip';
 import MobileBurgerMenu from './MobileBurgerMenu';
 
-function App() {
+const App = () => {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
   const MOBILE_WIDTH = 768;
 
@@ -64,36 +64,36 @@ function App() {
     }
   ), [currentUser, isLoggedIn, userEmail, isMenuVisible, isMobileView]);
 
-  function handleEditAvatarClick() {
+  const handleEditAvatarClick = () => {
     setEditAvatarPopupOpened(true);
-  }
+  };
 
-  function handleEditProfileClick() {
+  const handleEditProfileClick = () => {
     setEditProfileOpened(true);
-  }
+  };
 
-  function handleAddPlaceClick() {
+  const handleAddPlaceClick = () => {
     setAddPlacePopupOpened(true);
-  }
+  };
 
-  function closeAllPopups() {
+  const closeAllPopups = () => {
     setEditAvatarPopupOpened(false);
     setEditProfileOpened(false);
     setAddPlacePopupOpened(false);
     setSelectedCard(INITIAL_STATE_SELECTED_CARD);
     setConfirmPopupOpened(false);
     setInfoTooltipOpened(false);
-  }
+  };
 
-  function handleClosePopup() {
+  const handleClosePopup = () => {
     closeAllPopups();
-  }
+  };
 
-  function handleCardClick(card) {
+  const handleCardClick = (card) => {
     setSelectedCard(card);
-  }
+  };
 
-  function handleCardLike(card) {
+  const handleCardLike = (card) => {
     const isLiked = card.likes.some((item) => item._id === currentUser._id);
     handleError(
       api.changeLikeCardStatus(card._id, !isLiked)
@@ -104,9 +104,9 @@ function App() {
           }));
         }),
     );
-  }
+  };
 
-  function handleCardDelete(card) {
+  const handleCardDelete = (card) => {
     setConfirmPopupOpened(true);
     const delFunc = () => () => handleError(
       api.deleteCard(card._id)
@@ -117,93 +117,81 @@ function App() {
     );
 
     setRunIfConfirm(delFunc);
-  }
+  };
 
-  function onUpdateUser(data) {
-    return handleError(
-      api.setUserInfo(data)
-        .then((userData) => {
-          setCurrentUser((currentData) => ({
-            ...currentData,
-            ...userData,
-          }));
-          closeAllPopups();
-        }),
-    );
-  }
+  const onUpdateUser = (data) => handleError(
+    api.setUserInfo(data)
+      .then((userData) => {
+        setCurrentUser((currentData) => ({
+          ...currentData,
+          ...userData,
+        }));
+        closeAllPopups();
+      }),
+  );
 
-  function handleUpdateAvatar(data) {
-    return handleError(
-      api.setUserAvatar(data)
-        .then((userData) => {
-          setCurrentUser((currentData) => ({
-            ...currentData,
-            avatar: userData.avatar,
-          }));
-          closeAllPopups();
-        }),
-    );
-  }
+  const handleUpdateAvatar = (data) => handleError(
+    api.setUserAvatar(data)
+      .then((userData) => {
+        setCurrentUser((currentData) => ({
+          ...currentData,
+          avatar: userData.avatar,
+        }));
+        closeAllPopups();
+      }),
+  );
 
-  function handleAddPlaceSubmit(data) {
-    return handleError(
-      api.addCard(data)
-        .then((newCard) => {
-          setCards([newCard, ...cards]);
-          closeAllPopups();
-        }),
-    );
-  }
+  const handleAddPlaceSubmit = (data) => handleError(
+    api.addCard(data)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      }),
+  );
 
-  function handleConfirmSubmit() {
-    return runIfConfirm();
-  }
+  const handleConfirmSubmit = () => runIfConfirm();
 
-  function handleLogin(data) {
-    return handleError(
-      authorize(data)
-        .then((res) => {
-          if (res.token) {
-            handleError(
-              getContent(res.token)
-                .then((userData) => {
-                  setUserEmail(userData.data.email || '');
-                  setLoggedIn(true);
-                  navigate('/', { replace: true });
-                }),
-            );
-          }
-        }),
-    );
-  }
+  const handleLogin = (data) => handleError(
+    authorize(data)
+      .then((res) => {
+        if (res.token) {
+          handleError(
+            getContent(res.token)
+              .then((userData) => {
+                setUserEmail(userData.data.email || '');
+                setLoggedIn(true);
+                navigate('/', { replace: true });
+              }),
+          );
+        }
+      }),
+  );
 
-  function handleRegister(data) {
-    return handleError(
-      register(data)
-        .then(() => {
-          handleLogin(data)
-            .then(() => {
-              setInfoTooltipSuccefull(true);
-              setInfoTooltipOpened(true);
-            });
-        })
-        .catch((e) => {
-          setInfoTooltipSuccefull(false);
-          setInfoTooltipOpened(true);
-          return Promise.reject(e);
-        }),
-    );
-  }
+  const handleRegister = (data) => handleError(
+    register(data)
+      .then(() => {
+        handleLogin(data)
+          .then(() => {
+            setInfoTooltipSuccefull(true);
+            setInfoTooltipOpened(true);
+          });
+      })
+      .catch((e) => {
+        setInfoTooltipSuccefull(false);
+        setInfoTooltipOpened(true);
+        return Promise.reject(e);
+      }),
+  );
 
-  function handleSignOut() {
+  const handleSignOut = () => {
     setUserEmail('');
     setLoggedIn(false);
     setMenuVisible(false);
     localStorage.removeItem('jwt');
     navigate('/sign-in', { replace: true });
-  }
+  };
 
-  function tokenCheck() {
+  const tokenCheck = () => {
     const token = localStorage.getItem('jwt');
     if (token) {
       handleError(
@@ -217,7 +205,7 @@ function App() {
           }),
       );
     }
-  }
+  };
 
   useEffect(() => {
     tokenCheck();
@@ -327,6 +315,6 @@ function App() {
       </div>
     </AppContext.Provider>
   );
-}
+};
 
 export default App;

@@ -1,16 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
+const EditAvatarPopup = ({ isOpen, onClose, onUpdateAvatar }) => {
   const inputLinkRef = useRef();
 
-  function handleSubmit() {
-    return onUpdateAvatar({
-      avatar: inputLinkRef.current.value,
-    });
-  }
+  const handleSubmit = () => onUpdateAvatar({
+    avatar: inputLinkRef.current.value,
+  });
 
-  //  Можно было бы использовать useClearInputs
   useEffect(() => {
     inputLinkRef.current.value = '';
   });
@@ -35,6 +32,6 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
       <span className="avatar-error modal-form__input-error" />
     </PopupWithForm>
   );
-}
+};
 
 export default EditAvatarPopup;

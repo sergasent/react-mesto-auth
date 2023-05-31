@@ -1,7 +1,7 @@
 import React from 'react';
 import PopupWithForm from './PopupWithForm';
 
-function ConfirmPopup({ isOpen, onClose, onSubmit }) {
+const ConfirmPopup = ({ isOpen, onClose, onSubmit }) => {
   const isFormValid = true;
   return (
     <PopupWithForm
@@ -14,6 +14,6 @@ function ConfirmPopup({ isOpen, onClose, onSubmit }) {
       isValid={isFormValid}
     />
   );
-}
+};
 
 export default ConfirmPopup;

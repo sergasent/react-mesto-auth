@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import AppContext from '../contexts/AppContext';
 
-function Header({
+const Header = ({
   logo,
   headerState: { link, linkText, linkFunc },
-}) {
+}) => {
   const {
     userEmail, isLoggedIn, isMenuVisible, toggleShowMenu, isMobileView,
   } = useContext(AppContext);
@@ -35,6 +35,6 @@ function Header({
       )}
     </header>
   );
-}
+};
 
 export default Header;

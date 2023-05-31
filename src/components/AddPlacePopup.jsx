@@ -3,7 +3,7 @@ import React from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 
-function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
+const AddPlacePopup = ({ isOpen, onClose, onAddPlace }) => {
   const {
     isFormValid, formValues, validState, handleChange,
   } = useFormValidation({
@@ -14,12 +14,10 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
     },
   });
 
-  function handleSubmit() {
-    return onAddPlace({
-      name: formValues?.name,
-      link: formValues?.link,
-    });
-  }
+  const handleSubmit = () => onAddPlace({
+    name: formValues?.name,
+    link: formValues?.link,
+  });
 
   return (
     <PopupWithForm
@@ -60,6 +58,6 @@ function AddPlacePopup({ isOpen, onClose, onAddPlace }) {
       </span>
     </PopupWithForm>
   );
-}
+};
 
 export default AddPlacePopup;

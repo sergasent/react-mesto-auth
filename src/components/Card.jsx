@@ -16,17 +16,17 @@ const Card = memo(({
     isLiked && 'card__like-button_active'
   }`;
 
-  function handleClick() {
+  const handleClick = () => {
     onCardClick(card);
-  }
+  };
 
-  function handleLikeClick() {
+  const handleLikeClick = () => {
     onCardLike(card);
-  }
+  };
 
-  function handleDeleteClick() {
+  const handleDeleteClick = () => {
     onCardDelete(card);
-  }
+  };
 
   return (
     <li className="cards__list-item">

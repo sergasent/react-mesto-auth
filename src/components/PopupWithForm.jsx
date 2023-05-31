@@ -1,26 +1,26 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
 
-function PopupWithForm({
+const PopupWithForm = ({
   name, isOpen, isValid, title, children, buttonText, onClose, onSubmit,
-}) {
+}) => {
   const [buttonCaption, setButtonText] = useState(buttonText || 'Сохранить');
   const defaultButtonCaption = buttonCaption;
 
-  function handleSubmit(e) {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setButtonText('Загрузка');
     onSubmit()
       .finally(() => setTimeout(() => {
         setButtonText(defaultButtonCaption);
       }, 300)); // 300мс на анимацию закрытия
-  }
+  };
 
-  function handleQuitClick(evt) {
+  const handleQuitClick = (evt) => {
     if (evt.target === evt.currentTarget) {
       onClose();
     }
-  }
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -57,6 +57,6 @@ function PopupWithForm({
       </div>
     </div>
   );
-}
+};
 
 export default PopupWithForm;

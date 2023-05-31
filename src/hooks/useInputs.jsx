@@ -4,7 +4,7 @@ const useInputs = (inputs, setFormValid) => {
   const [formValues, setFormValues] = useState(inputs);
   const [validState, setValidState] = useState({});
 
-  function handleChange(evt) {
+  const handleChange = (evt) => {
     const { name, value } = evt.target;
     setFormValues({
       ...formValues,
@@ -15,12 +15,12 @@ const useInputs = (inputs, setFormValid) => {
       [name]: evt.target.validationMessage,
     });
     setFormValid(evt.target.closest('form').checkValidity());
-  }
+  };
 
-  function refreshForm(refreshInputs) {
+  const refreshForm = (refreshInputs) => {
     setFormValues({ ...refreshInputs });
     setValidState({});
-  }
+  };
 
   return {
     formValues,

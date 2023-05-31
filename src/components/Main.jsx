@@ -5,7 +5,7 @@ import useIsCurrentLocation from '../hooks/useIsCurrentLocation';
 
 import AppContext from '../contexts/AppContext';
 
-function Main({
+const Main = ({
   cards,
   onEditAvatar,
   onEditProfile,
@@ -15,7 +15,7 @@ function Main({
   onCardDelete,
   fillHeader,
   onSignOut,
-}) {
+}) => {
   const { currentUser: { avatar, name, about } } = useContext(AppContext);
 
   const isOpen = useIsCurrentLocation('/');
@@ -78,6 +78,6 @@ function Main({
       </section>
     </main>
   );
-}
+};
 
 export default Main;

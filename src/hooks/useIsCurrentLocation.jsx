@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function useIsCurrentLocation(url) {
+const useIsCurrentLocation = (url) => {
   const [isOpen, setOpen] = useState(false);
   const location = useLocation();
 
@@ -14,6 +14,6 @@ function useIsCurrentLocation(url) {
   }, [location]);
 
   return isOpen;
-}
+};
 
 export default useIsCurrentLocation;

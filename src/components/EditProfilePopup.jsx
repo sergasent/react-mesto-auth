@@ -4,7 +4,7 @@ import useFormValidation from '../hooks/useFormValidation';
 
 import AppContext from '../contexts/AppContext';
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   const {
     currentUser: {
       name: currentName,
@@ -22,12 +22,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     },
   });
 
-  function handleSubmit() {
-    return onUpdateUser({
-      name: formValues?.name,
-      about: formValues?.about,
-    });
-  }
+  const handleSubmit = () => onUpdateUser({
+    name: formValues?.name,
+    about: formValues?.about,
+  });
 
   return (
     <PopupWithForm
@@ -70,6 +68,6 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       </span>
     </PopupWithForm>
   );
-}
+};
 
 export default EditProfilePopup;

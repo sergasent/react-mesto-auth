@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 
-function ImagePopup({ card: { link, name }, onClose }) {
-  function handleQuitClick(evt) {
+const ImagePopup = ({ card: { link, name }, onClose }) => {
+  const handleQuitClick = (evt) => {
     if (evt.target === evt.currentTarget) {
       onClose();
     }
-  }
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -26,6 +26,6 @@ function ImagePopup({ card: { link, name }, onClose }) {
       </div>
     </div>
   );
-}
+};
 
 export default ImagePopup;

@@ -1,14 +1,14 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 
-function InfoTooltip({
+const InfoTooltip = ({
   isOpen, isSuccessful, onClose, imgSuccessful, imgFailed, textSuccessful, textFailed,
-}) {
-  function handleQuitClick(evt) {
+}) => {
+  const handleQuitClick = (evt) => {
     if (evt.target === evt.currentTarget) {
       onClose();
     }
-  }
+  };
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -28,6 +28,6 @@ function InfoTooltip({
       </div>
     </div>
   );
-}
+};
 
 export default InfoTooltip;
