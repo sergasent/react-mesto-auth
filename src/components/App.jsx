@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Route, Routes, useNavigate, Navigate,
 } from 'react-router-dom';
@@ -13,7 +13,7 @@ import api from '../utils/Api';
 import handleError from '../utils/utils';
 import { register, authorize, getContent } from '../utils/Auth';
 
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AppContext from '../contexts/AppContext';
 
 import Header from './Header';
 import Main from './Main';
@@ -26,9 +26,11 @@ import ConfirmPopup from './ConfirmPopup';
 import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
+import MobileBurgerMenu from './MobileBurgerMenu';
 
 function App() {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
+  const MOBILE_WIDTH = 768;
 
   const [cards, setCards] = useState([]);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
@@ -44,8 +46,23 @@ function App() {
   const [headerState, setHeaderState] = useState({});
   const [isLoggedIn, setLoggedIn] = useState(false);
   const [userEmail, setUserEmail] = useState('');
+  const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isMobileView, setMobileView] = useState(window.innerWidth <= MOBILE_WIDTH);
 
   const navigate = useNavigate();
+
+  const toggleShowMenu = () => setMenuVisible((isVisible) => !isVisible);
+
+  const appContextValue = useMemo(() => (
+    {
+      currentUser,
+      isLoggedIn,
+      userEmail,
+      isMenuVisible,
+      isMobileView,
+      toggleShowMenu,
+    }
+  ), [currentUser, isLoggedIn, userEmail, isMenuVisible, isMobileView]);
 
   function handleEditAvatarClick() {
     setEditAvatarPopupOpened(true);
@@ -181,6 +198,7 @@ function App() {
   function handleSignOut() {
     setUserEmail('');
     setLoggedIn(false);
+    setMenuVisible(false);
     localStorage.removeItem('jwt');
     navigate('/sign-in', { replace: true });
   }
@@ -210,13 +228,21 @@ function App() {
           setCards(cardsData);
         }),
     );
+
+    const handleWindowResize = () => {
+      setMobileView(window.innerWidth <= MOBILE_WIDTH);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => window.removeEventListener('resize', handleWindowResize);
   }, []);
 
   return (
-    <CurrentUserContext.Provider value={currentUser}>
+    <AppContext.Provider value={appContextValue}>
       <div className="page">
-        <div className="page__content">
-          <Header logo={logo} userEmail={userEmail} headerState={headerState} />
+        <div className={`page__content ${isMenuVisible ? 'page__content_menu-visible' : ''}`}>
+          <MobileBurgerMenu onSignOut={handleSignOut} />
+          <Header logo={logo} headerState={headerState} isMobileView={isMobileView} />
           <Routes>
             <Route
               path="/"
@@ -299,7 +325,7 @@ function App() {
 
         <ImagePopup card={selectedCard} onClose={handleClosePopup} />
       </div>
-    </CurrentUserContext.Provider>
+    </AppContext.Provider>
   );
 }
 

@@ -1,6 +1,6 @@
 import React, { useContext, memo } from 'react';
 
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AppContext from '../contexts/AppContext';
 
 const Card = memo(({
   card,
@@ -8,7 +8,7 @@ const Card = memo(({
   onCardLike,
   onCardDelete,
 }) => {
-  const currentUser = useContext(CurrentUserContext);
+  const { currentUser } = useContext(AppContext);
   const isOwn = card.owner._id === currentUser._id;
   const isLiked = card.likes.some((item) => item._id === currentUser._id);
 

@@ -3,7 +3,7 @@ import Card from './Card';
 import defaultUserIcon from '../images/profile/user-default.svg';
 import useIsCurrentLocation from '../hooks/useIsCurrentLocation';
 
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AppContext from '../contexts/AppContext';
 
 function Main({
   cards,
@@ -16,7 +16,7 @@ function Main({
   fillHeader,
   onSignOut,
 }) {
-  const { avatar, name, about } = useContext(CurrentUserContext);
+  const { currentUser: { avatar, name, about } } = useContext(AppContext);
 
   const isOpen = useIsCurrentLocation('/');
 
