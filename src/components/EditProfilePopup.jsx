@@ -2,13 +2,15 @@ import React, { useContext } from 'react';
 import PopupWithForm from './PopupWithForm';
 import useFormValidation from '../hooks/useFormValidation';
 
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AppContext from '../contexts/AppContext';
 
-function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
+const EditProfilePopup = ({ isOpen, onClose, onUpdateUser }) => {
   const {
-    name: currentName,
-    about: currentAbout,
-  } = useContext(CurrentUserContext);
+    currentUser: {
+      name: currentName,
+      about: currentAbout,
+    },
+  } = useContext(AppContext);
 
   const {
     isFormValid, formValues, validState, handleChange,
@@ -20,12 +22,10 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
     },
   });
 
-  function handleSubmit() {
-    return onUpdateUser({
-      name: formValues?.name,
-      about: formValues?.about,
-    });
-  }
+  const handleSubmit = () => onUpdateUser({
+    name: formValues?.name,
+    about: formValues?.about,
+  });
 
   return (
     <PopupWithForm
@@ -39,7 +39,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
       <input
         onChange={handleChange}
         value={formValues?.name ?? ''}
-        className="popup-form__input popup-form__input_type_username"
+        className="modal-form__input modal-form__input_type_username"
         type="text"
         name="name"
         id="profile-name"
@@ -48,13 +48,13 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         maxLength="40"
         required
       />
-      <span className={`popup-form__input-error ${validState?.name && 'popup-form__input-error_visible'}`}>
+      <span className={`modal-form__input-error ${validState?.name && 'modal-form__input-error_visible'}`}>
         {validState?.name}
       </span>
       <input
         onChange={handleChange}
         value={formValues?.about ?? ''}
-        className="popup-form__input popup-form__input_type_user-description"
+        className="modal-form__input modal-form__input_type_user-description"
         type="text"
         name="about"
         id="profile-description"
@@ -63,11 +63,11 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         maxLength="200"
         required
       />
-      <span className={`popup-form__input-error ${validState?.about && 'popup-form__input-error_visible'}`}>
+      <span className={`modal-form__input-error ${validState?.about && 'modal-form__input-error_visible'}`}>
         {validState?.about}
       </span>
     </PopupWithForm>
   );
-}
+};
 
 export default EditProfilePopup;

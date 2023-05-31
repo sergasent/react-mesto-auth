@@ -1,10 +1,11 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import Card from './Card';
 import defaultUserIcon from '../images/profile/user-default.svg';
+import useIsCurrentLocation from '../hooks/useIsCurrentLocation';
 
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import AppContext from '../contexts/AppContext';
 
-function Main({
+const Main = ({
   cards,
   onEditAvatar,
   onEditProfile,
@@ -12,8 +13,22 @@ function Main({
   onCardClick,
   onCardLike,
   onCardDelete,
-}) {
-  const { avatar, name, about } = useContext(CurrentUserContext);
+  fillHeader,
+  onSignOut,
+}) => {
+  const { currentUser: { avatar, name, about } } = useContext(AppContext);
+
+  const isOpen = useIsCurrentLocation('/');
+
+  useEffect(() => {
+    if (isOpen) {
+      fillHeader({
+        link: '/sign-in',
+        linkText: 'Выйти',
+        linkFunc: onSignOut,
+      });
+    }
+  }, [isOpen]);
 
   return (
     <main className="main page__section">
@@ -63,6 +78,6 @@ function Main({
       </section>
     </main>
   );
-}
+};
 
 export default Main;
