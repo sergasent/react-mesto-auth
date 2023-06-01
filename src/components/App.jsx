@@ -31,6 +31,8 @@ import MobileBurgerMenu from './MobileBurgerMenu';
 const App = () => {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
   const MOBILE_WIDTH = 768;
+  const SUCCESS_INFOTOOLTIP_TEXT = 'Вы успешно зарегистрировались!';
+  const FAIL_INFOTOOLTIP_TEXT = 'Что-то пошло не так! Попробуйте ещё раз.';
 
   const [cards, setCards] = useState([]);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpened] = useState(false);
@@ -39,7 +41,8 @@ const App = () => {
   const [isConfirmPopupOpen, setConfirmPopupOpened] = useState(false);
   const [isInfoTooltipOpen, setInfoTooltipOpened] = useState(false);
 
-  const [isInfoTooltipSuccefull, setInfoTooltipSuccefull] = useState(false);
+  const [isInfoTooltipSuccessful, setInfoTooltipSuccessful] = useState(false);
+  const [infoTooltipText, setInfoTooltipText] = useState('');
   const [selectedCard, setSelectedCard] = useState(INITIAL_STATE_SELECTED_CARD);
   const [currentUser, setCurrentUser] = useState({});
   const [runIfConfirm, setRunIfConfirm] = useState(null);
@@ -151,19 +154,25 @@ const App = () => {
 
   const handleConfirmSubmit = () => runIfConfirm();
 
+  const handleInfoTooltipOpen = (successful, message) => {
+    const infoText = message === 'unknown' ? FAIL_INFOTOOLTIP_TEXT : message;
+    setInfoTooltipSuccessful(successful);
+    setInfoTooltipText(infoText);
+    setInfoTooltipOpened(true);
+  };
+
   const handleLogin = (data) => handleError(
     authorize(data)
       .then((res) => {
         if (res.token) {
-          handleError(
-            getContent(res.token)
-              .then((userData) => {
-                setUserEmail(userData.data.email || '');
-                setLoggedIn(true);
-                navigate('/', { replace: true });
-              }),
-          );
+          setUserEmail(data.email || '');
+          setLoggedIn(true);
+          navigate('/', { replace: true });
         }
+      })
+      .catch((e) => {
+        handleInfoTooltipOpen(false, e);
+        return Promise.reject(e);
       }),
   );
 
@@ -172,13 +181,11 @@ const App = () => {
       .then(() => {
         handleLogin(data)
           .then(() => {
-            setInfoTooltipSuccefull(true);
-            setInfoTooltipOpened(true);
+            handleInfoTooltipOpen(true, SUCCESS_INFOTOOLTIP_TEXT);
           });
       })
       .catch((e) => {
-        setInfoTooltipSuccefull(false);
-        setInfoTooltipOpened(true);
+        handleInfoTooltipOpen(false, e);
         return Promise.reject(e);
       }),
   );
@@ -202,13 +209,16 @@ const App = () => {
               setLoggedIn(true);
               navigate('/', { replace: true });
             }
+          })
+          .catch((e) => {
+            handleInfoTooltipOpen(false, e);
+            return Promise.reject(e);
           }),
       );
     }
   };
 
-  useEffect(() => {
-    tokenCheck();
+  const handleLoadContent = () => {
     handleError(
       Promise.all([api.getUserInfo(), api.getInitialCards()])
         .then(([userInfo, cardsData]) => {
@@ -216,6 +226,16 @@ const App = () => {
           setCards(cardsData);
         }),
     );
+  };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      handleLoadContent();
+    }
+  }, [isLoggedIn]);
+
+  useEffect(() => {
+    tokenCheck();
 
     const handleWindowResize = () => {
       setMobileView(window.innerWidth <= MOBILE_WIDTH);
@@ -303,12 +323,11 @@ const App = () => {
 
         <InfoTooltip
           isOpen={isInfoTooltipOpen}
-          isSuccessful={isInfoTooltipSuccefull}
+          isSuccessful={isInfoTooltipSuccessful}
           onClose={handleClosePopup}
           imgSuccessful={imgSuccessfull}
           imgFailed={imgFailed}
-          textSuccessful="Вы успешно зарегистрировались!"
-          textFailed="Что-то пошло не так! Попробуйте ещё раз."
+          text={infoTooltipText}
         />
 
         <ImagePopup card={selectedCard} onClose={handleClosePopup} />

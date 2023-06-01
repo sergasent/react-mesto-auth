@@ -7,17 +7,30 @@ function handleQuery({
     ...extraHeaders,
     'Content-Type': 'application/json',
   };
-
+  let responseOk = false;
+  let responseStatus = '';
   return fetch(`${baseUrl}${link}`, {
     method,
     headers,
     body: JSON.stringify(data),
   })
     .then((res) => {
-      if (res.ok) {
+      responseOk = res.ok;
+      responseStatus = res.status;
+      try {
         return res.json();
+      } catch (e) {
+        return Promise.reject('unknown');
       }
-      return Promise.reject(res.status);
+    })
+    .then((resData) => {
+      if (responseOk) {
+        return Promise.resolve(resData);
+      }
+      if (responseStatus === 400 || responseStatus === 401) {
+        return Promise.reject(resData.error ?? resData.message ?? JSON.stringify(resData));
+      }
+      return Promise.reject('unknown');
     });
 }
 

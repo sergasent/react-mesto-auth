@@ -2,7 +2,7 @@
 import React from 'react';
 
 const InfoTooltip = ({
-  isOpen, isSuccessful, onClose, imgSuccessful, imgFailed, textSuccessful, textFailed,
+  isOpen, isSuccessful, onClose, imgSuccessful, imgFailed, text,
 }) => {
   const handleQuitClick = (evt) => {
     if (evt.target === evt.currentTarget) {
@@ -18,7 +18,7 @@ const InfoTooltip = ({
     >
       <div className="modal-block modal-block_type_info">
         <img className="modal-block__info-image" src={isSuccessful ? imgSuccessful : imgFailed} alt="" />
-        <h2 className="modal-block__info-text">{isSuccessful ? textSuccessful : textFailed}</h2>
+        <h2 className="modal-block__info-text">{text}</h2>
         <button
           onClick={onClose}
           className="popup__close-button page__link"
