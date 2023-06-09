@@ -27,6 +27,7 @@ import Login from './Login';
 import Register from './Register';
 import InfoTooltip from './InfoTooltip';
 import MobileBurgerMenu from './MobileBurgerMenu';
+import MissingPage from './MissingPage';
 
 const App = () => {
   const INITIAL_STATE_SELECTED_CARD = { link: '', name: '' };
@@ -292,7 +293,14 @@ const App = () => {
                 />
               )}
             />
-            <Route path="*" element={<Navigate to="/sign-in" replace />} />
+            <Route
+              path="*"
+              element={
+                isLoggedIn
+                  ? <MissingPage />
+                  : <Navigate to="/sign-in" replace />
+              }
+            />
           </Routes>
           <Footer />
         </div>
