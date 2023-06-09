@@ -1,0 +1,13 @@
+.missing-page__back-link {
+  border: none;
+  background: transparent;
+  padding: 0;
+  
+  cursor: pointer;
+
+  color: #fff;
+}
+
+.missing-page__back-link:hover {
+  opacity: .6;
+}
